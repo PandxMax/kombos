@@ -29,8 +29,11 @@ Cada paso se redondea a 2 decimales (el peso a 3) antes de seguir, igual que al 
 
 - Varias campañas, cada una con sus lotes
 - Resultado en vivo mientras escribes (acepta coma o punto decimal)
-- Reporte para compartir por WhatsApp, correo, etc.
-- Exportar e importar los datos en un archivo `.json` (copia de seguridad)
+- **Exportar a Excel (.xlsx) y PDF** para compartir o guardar en el celular
+  - El Excel trae fórmulas: si cambias un dato, se recalcula solo
+  - Desde el menú ⋮ se puede exportar todas las campañas en un solo Excel (con hoja de resumen)
+- Reporte para compartir como texto por WhatsApp, correo, etc.
+- Copia de seguridad: exportar e importar los datos en un archivo `.json`
 - Modo claro y oscuro
 
 ## Compilación

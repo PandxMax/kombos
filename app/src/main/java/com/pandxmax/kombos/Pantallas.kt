@@ -130,6 +130,7 @@ fun ListaScreen(repo: Repositorio, onOpen: (Long) -> Unit, onNueva: () -> Unit) 
     val ctx = LocalContext.current
     var menu by remember { mutableStateOf(false) }
     var acerca by remember { mutableStateOf(false) }
+    var exp by remember { mutableStateOf<Exportacion?>(null) }
 
     val exportar = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
@@ -179,14 +180,23 @@ fun ListaScreen(repo: Repositorio, onOpen: (Long) -> Unit, onNueva: () -> Unit) 
                         }
                         DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                             DropdownMenuItem(
-                                text = { Text("Exportar datos") },
+                                text = { Text("Exportar todo a Excel") },
+                                enabled = repo.campanas.isNotEmpty(),
+                                onClick = {
+                                    menu = false
+                                    exp = excelDe(repo.campanas.toList(), "Kombos campañas ${hoy()}")
+                                }
+                            )
+                            HorizontalDivider()
+                            DropdownMenuItem(
+                                text = { Text("Copia de seguridad (exportar)") },
                                 onClick = {
                                     menu = false
                                     exportar.launch("kombos-${hoy()}.json")
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Importar datos") },
+                                text = { Text("Restaurar copia (importar)") },
                                 onClick = {
                                     menu = false
                                     importar.launch(arrayOf("*/*"))
@@ -278,6 +288,8 @@ fun ListaScreen(repo: Repositorio, onOpen: (Long) -> Unit, onNueva: () -> Unit) 
         }
     }
 
+    DialogoExportar(exp) { exp = null }
+
     if (acerca) {
         AlertDialog(
             onDismissRequest = { acerca = false },
@@ -288,7 +300,8 @@ fun ListaScreen(repo: Repositorio, onOpen: (Long) -> Unit, onNueva: () -> Unit) 
                     "Versión ${BuildConfig.VERSION_NAME}\n\n" +
                         "Liquidación de campañas: lotes, flete, facturación, gastos " +
                         "y reparto de utilidades entre socios.\n\n" +
-                        "Los cálculos se redondean a 2 decimales en cada paso, igual que a mano."
+                        "Los cálculos se redondean a 2 decimales en cada paso, igual que a mano.\n\n" +
+                        "Novedades 1.1: exportar a Excel y PDF."
                 )
             }
         )
@@ -480,6 +493,9 @@ fun ReporteScreen(c: Campana, onBack: () -> Unit) {
     BackHandler(onBack = onBack)
     val ctx = LocalContext.current
     val r = calcular(c)
+    var exp by remember { mutableStateOf<Exportacion?>(null) }
+
+    DialogoExportar(exp) { exp = null }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -533,10 +549,25 @@ fun ReporteScreen(c: Campana, onBack: () -> Unit) {
                     color = if (r.porSocio.signum() < 0) MaterialTheme.colorScheme.error else dorado()
                 )
             }
-            Button(onClick = { compartir(ctx, c, r) }, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                "Exportar",
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Button(
+                    onClick = { exp = excelDe(listOf(c), "Liquidación ${c.nombre} ${c.fecha}") },
+                    modifier = Modifier.weight(1f)
+                ) { Text("Excel") }
+                Button(
+                    onClick = { exp = pdfDe(c) },
+                    modifier = Modifier.weight(1f)
+                ) { Text("PDF") }
+            }
+            OutlinedButton(onClick = { compartir(ctx, c, r) }, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Compartir reporte")
+                Text("Compartir como texto")
             }
         }
     }

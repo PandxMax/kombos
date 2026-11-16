@@ -12,8 +12,8 @@ android {
         applicationId = "com.pandxmax.kombos"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     // Llave fija para que cada APK nuevo se instale encima del anterior sin borrar datos.
@@ -61,4 +61,6 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-core")
+
+    testImplementation("junit:junit:4.13.2")
 }

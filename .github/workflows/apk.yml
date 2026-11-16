@@ -23,6 +23,14 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Pruebas
+        run: gradle testReleaseUnitTest --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: excel-de-prueba
+          path: app/build/test-exports/
+
       - name: Compilar
         run: gradle assembleRelease --no-daemon --stacktrace
 
