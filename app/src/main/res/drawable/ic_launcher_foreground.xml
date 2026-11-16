@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Barras (lotes) -->
+    <path android:fillColor="#FFFFFF" android:pathData="M34,62h9v14h-9z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M49,52h9v24h-9z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M64,42h9v34h-9z" />
+    <!-- Moneda -->
+    <path android:fillColor="#E0B04A" android:pathData="M43,40m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+</vector>
