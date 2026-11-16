@@ -27,6 +27,7 @@ jobs:
         run: gradle testReleaseUnitTest --no-daemon --stacktrace
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: excel-de-prueba
           path: app/build/test-exports/

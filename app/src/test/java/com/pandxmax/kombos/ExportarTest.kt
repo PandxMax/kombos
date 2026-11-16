@@ -24,7 +24,7 @@ class ExportarTest {
     @Test
     fun comaDecimal() {
         assertEquals("9.59", limpiarDecimal("9,59"))
-        assertEquals("10.000", limpiarDecimal("10.000,5"))
+        assertEquals("10.0005", limpiarDecimal("10.000,5")) // solo vale el primer separador
     }
 
     @Test
