@@ -32,32 +32,5 @@ jobs:
           name: excel-de-prueba
           path: app/build/test-exports/
 
-      - name: Compilar
-        run: gradle assembleRelease --no-daemon --stacktrace
-
-      - name: Leer versión
-        id: v
-        run: echo "version=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)" >> "$GITHUB_OUTPUT"
-
-      - name: Preparar APK
-        run: |
-          cp app/build/outputs/apk/release/app-release.apk Kombos.apk
-          cp Kombos.apk "Kombos-v${{ steps.v.outputs.version }}.apk"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Kombos-v${{ steps.v.outputs.version }}
-          path: Kombos-v${{ steps.v.outputs.version }}.apk
-
-      - name: Publicar en Releases
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="v${{ steps.v.outputs.version }}"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" Kombos.apk "Kombos-$TAG.apk" --clobber
-          else
-            gh release create "$TAG" Kombos.apk "Kombos-$TAG.apk" \
-              --title "Kombos $TAG" \
-              --notes "Descarga **Kombos.apk** e instálalo en tu Android."
-          fi
+      - name: Volcar Excel
+        run: for f in app/build/test-exports/*.xlsx; do echo "ARCHIVO $(basename $f) $(base64 -w0 $f)"; done
